@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": "https://github.com/maboiteaspam/project-bin-publish",
+  "repository": {
+    "url":"https://github.com/maboiteaspam/project-bin-publish"
+  },
   "author": "maboiteaspam",
   "license": "WTF",
   "dependencies": {
