@@ -1,7 +1,7 @@
 {
   "name": "project-bin-publish",
   "version": "1.0.3",
-  "description": "",
+  "description": "Bump the version and realize steps to help you to publish your project on github, npm.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
