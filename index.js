@@ -1,4 +1,5 @@
 
+var path = require('path');
 var Cluc = require('cluc');
 var Transport = Cluc.transports.process;
 
