@@ -109,11 +109,6 @@ var env = !program.env?'local':program.env;
         this.display();
 
       }).skip(pkg.private).stream('npm publish', function(){
-        this.warn(/fatal:/);
-        this.success(/(:<remoteRev>[\w-]+)[.]+(:<localRev>[\w-]+)\s+(:<remoteBranch>[\w-]+)\s+->\s+(:<localBranch>[\w-]+)/,
-          'pushed\nlocal\tlocalBranch@localRev\nremote\tremoteBranch@remoteRev');
-        this.success('Everything up-to-date');
-        sendGhAuth(this);
         this.display();
 
       }).skip(!machine.profileData.github).then(function(then){
