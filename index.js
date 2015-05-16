@@ -144,7 +144,7 @@ var line = new Cluc()
     sendGhAuth(this);
     this.display();
 
-  }).skip('private' in pkg).stream('npm publish', function(){
+  }).skip(pkg.private).stream('npm publish', function(){
     this.warn(/fatal:/);
     this.success(/(:<remoteRev>[\w-]+)[.]+(:<localRev>[\w-]+)\s+(:<remoteBranch>[\w-]+)\s+->\s+(:<localBranch>[\w-]+)/,
       'pushed\nlocal\tlocalBranch@localRev\nremote\tremoteBranch@remoteRev');
