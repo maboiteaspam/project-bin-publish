@@ -7,5 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "maboiteaspam",
-  "license": "WTF"
+  "license": "WTF",
+  "dependencies": {
+    "cluc": "^1.0.23",
+    "github": "^0.2.4",
+    "inquirer": "^0.8.4",
+    "semver": "^4.3.4"
+  }
 }
