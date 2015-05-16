@@ -1,4 +1,5 @@
 
+var fs = require('fs');
 var path = require('path');
 var Cluc = require('cluc');
 var Transport = Cluc.transports.process;
@@ -117,8 +118,9 @@ var line = new Cluc()
   }).then(function(next){
     pkg.version = this.getValue('newRevision');
     var releaseType = this.getValue('releaseType');
-    line.writeFile('./package.json', JSON.stringify(pkg, null, 2)+'\n', next);
-    line.writeFile('./version', releaseType+' '+pkg.version+'\n', next);
+    fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2)+'\n');
+    fs.writeFileSync('./version', releaseType+' '+pkg.version+'\n');
+    next();
 
   }).stream('git pull <%=sshUrl%> <%=branch%>', function(){
     sendGhAuth(this);

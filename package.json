@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
-    "url":"https://github.com/maboiteaspam/project-bin-publish"
+    "url": "https://github.com/maboiteaspam/project-bin-publish"
   },
   "author": "maboiteaspam",
   "license": "WTF",
