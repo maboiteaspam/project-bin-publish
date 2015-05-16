@@ -23,7 +23,7 @@ npm i project-bin-publish -g
 
 # Configuration
 
-Create a ```json``` file on root directory of your project.
+Create a ```.local.json``` file on root directory of your project.
 
 ```json
 {
