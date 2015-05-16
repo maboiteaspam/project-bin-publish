@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Project-bin-publish : Bump the version and realize steps to help you to publish your project on github, npm.">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Project-bin-publish</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/maboiteaspam/project-bin-publish">View on GitHub</a>
+
+          <h1 id="project_title">Project-bin-publish</h1>
+          <h2 id="project_tagline">Bump the version and realize steps to help you to publish your project on github, npm.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/maboiteaspam/project-bin-publish/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/maboiteaspam/project-bin-publish/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="project-bin-publish" class="anchor" href="#project-bin-publish" aria-hidden="true"><span class="octicon octicon-link"></span></a>project-bin-publish</h1>
+
+<p>Bump the version and realize steps to help you to publish your project on github, npm.</p>
+
+<h1>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h1>
+
+<div class="highlight highlight-sh"><pre>npm i project-bin-publish -g</pre></div>
+
+<h1>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<div class="highlight highlight-sh"><pre>  Usage: project-publish [env]
+
+  Publish your project
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number</pre></div>
+
+<h1>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h1>
+
+<p>Create a <code>.local.json</code> file on root directory of your project.</p>
+
+<div class="highlight highlight-json"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>profileData<span class="pl-pds">"</span></span>:{
+    <span class="pl-s"><span class="pl-pds">"</span>github<span class="pl-pds">"</span></span>:{
+      <span class="pl-s"><span class="pl-pds">"</span>username<span class="pl-pds">"</span></span>:<span class="pl-s"><span class="pl-pds">"</span>TO UPDATE<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>password<span class="pl-pds">"</span></span>:<span class="pl-s"><span class="pl-pds">"</span>TO UPDATE<span class="pl-pds">"</span></span>
+    },
+    <span class="pl-s"><span class="pl-pds">"</span>publish<span class="pl-pds">"</span></span>:{
+      <span class="pl-s"><span class="pl-pds">"</span>branch<span class="pl-pds">"</span></span>:<span class="pl-s"><span class="pl-pds">"</span>TO UPDATE<span class="pl-pds">"</span></span>
+    }
+  }
+}</pre></div>
+
+<p><code>project-bin-publish</code> will ensure <code>.local.json</code> file 
+is added to <code>.gitignore</code> file.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Project-bin-publish maintained by <a href="https://github.com/maboiteaspam">maboiteaspam</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
