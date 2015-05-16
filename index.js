@@ -3,6 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 var program = require('commander');
+var _ = require('underscore');
 var Config = require("project-bin-config");
 var Cluc = require('cluc');
 var Transport = Cluc.transports.process;
@@ -31,6 +32,13 @@ var env = !program.env?'local':program.env;
 (new Config()).load().get(env)
   .forEach(function(machine){
 
+    _.defaults(
+      machine.profileData.publish,{
+        branch:'master'
+      });
+
+    var pubConfig = machine.profileData.publish;
+
     var line = new Cluc()
 
       .ensureFileContains('.gitignore', '\n.local\n')
@@ -47,7 +55,7 @@ var env = !program.env?'local':program.env;
         this.saveValue('pkgRepository', pkg.repository);
         this.saveValue('sshUrl', sshUrl);
         this.saveValue('projectPath', projectPath);
-        this.saveValue('branch', machine.profileData.publish.branch || 'master');
+        this.saveValue('branch', pubConfig.branch);
         this.saveValue('gitAuth', machine.profileData.github);
         next();
 

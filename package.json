@@ -1,6 +1,6 @@
 {
   "name": "project-bin-publish",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Bump the version and realize steps to help you to publish your project on github, npm.",
   "main": "index.js",
   "scripts": {
@@ -18,6 +18,7 @@
     "cluc": "^1.0.23",
     "commander": "^2.8.1",
     "github": "^0.2.4",
-    "semver": "^4.3.4"
+    "semver": "^4.3.4",
+    "underscore": "^1.8.3"
   }
 }
