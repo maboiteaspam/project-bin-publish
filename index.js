@@ -118,8 +118,10 @@ var line = new Cluc()
   }).then(function(next){
     pkg.version = this.getValue('newRevision');
     var releaseType = this.getValue('releaseType');
-    fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2)+'\n');
-    fs.writeFileSync('./version', releaseType+' '+pkg.version+'\n');
+    if( releaseType!=='same'){
+      fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2)+'\n');
+      fs.writeFileSync('./version', releaseType+' '+pkg.version+'\n');
+    }
     next();
 
   }).stream('git pull <%=sshUrl%> <%=branch%>', function(){
@@ -160,8 +162,8 @@ var line = new Cluc()
     var releaseType = this.getValue('releaseType');
     gitHubRelease(branch, pkg.name, tagname, releaseType, then);
 
-  }).title('', 'All done !\n\n' +
+  }).title('', '\nAll done !\n\n' +
   'Published <%=pkgName%>\n' +
-  'on <%=branch%> to <%=releaseType%> <%=newRevision%>')
+  'on <%=branch%> to <%=releaseType%> <%=newRevision%>\n')
 
   .run(new Transport());
