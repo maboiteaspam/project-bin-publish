@@ -15,7 +15,7 @@
   "author": "maboiteaspam",
   "license": "WTF",
   "dependencies": {
-    "cluc": "^1.0.23",
+    "cluc": "^1.0.27",
     "commander": "^2.8.1",
     "github": "^0.2.4",
     "semver": "^4.3.4",
