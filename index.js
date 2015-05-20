@@ -41,7 +41,7 @@ var env = !program.env?'local':program.env;
 
     var line = new Cluc()
 
-      .ensureFileContains('.gitignore', '\n.local\n')
+      .ensureFileContains('.gitignore', '\n.local.json\n')
       .ensureFileContains('.gitignore', '\n.idea/\n')
 
       .then(function(next){
@@ -116,15 +116,17 @@ var env = !program.env?'local':program.env;
         sendGhAuth(this);
         this.display();
 
-      }).skip(pkg.private).stream('npm publish', function(){
-        this.display();
-
-      }).skip(!machine.profileData.github).then(function(then){
-        var tagname = this.getValue('newRevision');
-        var releaseType = this.getValue('releaseType');
-        var branch = this.getValue('branch');
-        gitHubRelease(this, branch, pkg.name, tagname, releaseType, then);
-
+      }).when(!pkg.private, function(line){
+        line.stream('npm publish', function(){
+          this.display();
+        });
+      }).when(machine.profileData.github, function(line){
+        line.then(function(then){
+          var tagname = this.getValue('newRevision');
+          var releaseType = this.getValue('releaseType');
+          var branch = this.getValue('branch');
+          gitHubRelease(this, branch, pkg.name, tagname, releaseType, then);
+        });
       }).title('', '\nAll done !\n\n' +
       'Published <%=pkgName%>\n' +
       'on <%=branch%> to <%=releaseType%> <%=newRevision%>\n')
