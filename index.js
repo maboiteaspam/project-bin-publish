@@ -17,7 +17,7 @@ var pkg = require(path.join(projectPath, 'package.json') );
 var releaseTypes = listReleaseTypes( pkg.version );
 var newRevision;
 var releaseType;
-var sshUrl = pkg.repository.url.replace(/https?:\/\//,'ssh://git@');
+var sshUrl;
 
 program
   .version(require(path.join(__dirname, 'package.json') ).version)
@@ -33,11 +33,17 @@ var env = !program.env?'local':program.env;
   .forEach(function(machine){
 
     _.defaults(
+      machine.profileData,{
+        publish:{
+          branch:'master'
+        }
+      });
+    _.defaults(
       machine.profileData.publish,{
         branch:'master'
       });
 
-    var pubConfig = machine.profileData.publish;
+    var pubConfig = machine.profileData.publish || {};
 
     var line = new Cluc()
 
@@ -51,6 +57,7 @@ var env = !program.env?'local':program.env;
         if(!pkg.repository){
           throw 'pkg.repository is missing';
         }
+        sshUrl = pkg.repository.url.replace(/https?:\/\//,'ssh://git@');
         this.saveValue('pkgName', pkg.name);
         this.saveValue('pkgRepository', pkg.repository);
         this.saveValue('sshUrl', sshUrl);
@@ -144,8 +151,10 @@ var env = !program.env?'local':program.env;
 
 function sendGhAuth(context){
   var gitAuth = context.getValue('gitAuth');
-  context.answer(/^Username/i, gitAuth.username);
-  context.answer(/^Password/i, gitAuth.password);
+  if(gitAuth){
+    context.answer(/^Username/i, gitAuth.username);
+    context.answer(/^Password/i, gitAuth.password);
+  }
 }
 
 function gitHubRelease(context, branch, reponame, tagname, releaseType, then){
