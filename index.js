@@ -135,12 +135,12 @@ var env = !program.env?'local':program.env;
             var branch = this.getValue('branch');
             gitHubRelease(this, branch, pkg.name, tagname, releaseType, then);
           });
-      }).when(!!machine.profileData.github, function(line){
+      }).when(!machine.profileData.github, function(line){
         line.title('', 'Creating git tag')
           .stream('git tag -a <%=newRevision%> -m "<%=releaseType%> <%=newRevision%>"', function(then){
             this.display();
           })
-          .stream('git push <%=sshUrl%> <%=newRevision%>"', function(then){
+          .stream('git push <%=sshUrl%> <%=newRevision%>', function(then){
             this.display();
           });
       }).title('', '\nAll done !\n\n' +
