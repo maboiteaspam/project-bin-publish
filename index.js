@@ -128,12 +128,21 @@ var env = !program.env?'local':program.env;
           this.display();
         });
       }).when(machine.profileData.github, function(line){
-        line.then(function(then){
-          var tagname = this.getValue('newRevision');
-          var releaseType = this.getValue('releaseType');
-          var branch = this.getValue('branch');
-          gitHubRelease(this, branch, pkg.name, tagname, releaseType, then);
-        });
+        line.title('', 'Creating github tag')
+          .then(function(then){
+            var tagname = this.getValue('newRevision');
+            var releaseType = this.getValue('releaseType');
+            var branch = this.getValue('branch');
+            gitHubRelease(this, branch, pkg.name, tagname, releaseType, then);
+          });
+      }).when(!!machine.profileData.github, function(line){
+        line.title('', 'Creating git tag')
+          .stream('git tag -a <%=newRevision%> -m "<%=releaseType%> <%=newRevision%>"', function(then){
+            this.display();
+          })
+          .stream('git push <%=sshUrl%> <%=newRevision%>"', function(then){
+            this.display();
+          });
       }).title('', '\nAll done !\n\n' +
       'Published <%=pkgName%>\n' +
       'on <%=branch%> to <%=releaseType%> <%=newRevision%>\n')
