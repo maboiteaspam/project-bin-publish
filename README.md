@@ -5,7 +5,7 @@ Bump the version and realize steps to help you to publish your project on github
 ## Installation
 
 ```sh
-$ npm project-bin-publish -g
+$ npm i project-bin-publish -g
 ```
 
 ## Usage
