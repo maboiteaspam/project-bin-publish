@@ -205,8 +205,8 @@ function gitHubRelease(context, branch, reponame, tagname, releaseType, body, th
     repo: reponame,
     tag_name: tagname,
     target_commitish: branch,
-    //name: "node-github-name",
-    body: body,
+    name: tagname,
+    body: '\n'+body,
     //draft: false,
     prerelease: releaseType==='prerelease'
   }, then);
