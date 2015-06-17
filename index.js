@@ -3,6 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 var program = require('commander');
+var temp = require('temp');
 var _ = require('underscore');
 var Config = require("project-bin-config");
 var Cluc = require('cluc');
@@ -47,9 +48,6 @@ var env = !program.env?'local':program.env;
 
     var line = new Cluc()
 
-      .ensureFileContains('.gitignore', '\n.local.json\n')
-      .ensureFileContains('.gitignore', '\n.idea/\n')
-
       .then(function(next){
         if(!pkg.name){
           throw 'pkg.name is missing';
@@ -65,31 +63,50 @@ var env = !program.env?'local':program.env;
         this.saveValue('branch', pubConfig.branch);
         this.saveValue('gitAuth', machine.profileData.github);
         next();
+      })
 
-      }).choose('Select a revision type', releaseTypes, function(release){
+      .choose('Select a revision type', releaseTypes, function(release){
         releaseType = release.match(/^\s*([a-z]+)\s*=>\s*(.+)$/i)[1];
         newRevision = release.match(/^\s*([a-z]+)\s*=>\s*(.+)$/i)[2];
         this.saveValue('releaseType', releaseType);
         this.saveValue('newRevision', newRevision);
+      })
 
-      }).title('', 'Release project\non <%=branch%> to <%=releaseType%> <%=newRevision%>')
+      .textedit('Write the release log', function(changelog){
+        this.saveValue('releaseLog', changelog+'\n');
+      })
+
       .stream('cd <%=projectPath%>', function(){
         this.display();
         this.dieOnError();
-
       }).stream('git status', function(){
         this.must(/(est propre|is clean)/ig, 'Tree should be clean')
           .or(line.confirmToStop('Tree is unclean, stop now ?', true));
+      })
 
-      }).stream('git fetch <%=sshUrl%>', function(){
+      .title('', 'Release project\non <%=branch%> to <%=releaseType%> <%=newRevision%>')
+
+      .subtitle('', 'Fetching from git')
+      .stream('git fetch <%=sshUrl%>', function(){
         sendGhAuth(this);
         this.display();
-
       }).stream('git checkout <%=branch%>', function(){
         sendGhAuth(this);
         this.display();
+      }).stream('git pull <%=sshUrl%> <%=branch%>', function(){
+        sendGhAuth(this);
+        this.display();
+      })
 
-      }).then(function(next){
+      .subtitle('', 'git tag')
+      .stream('git tag -a <%=newRevision%> -m <%=quote("releaseLog")%>', function(){
+        this.display();
+      })
+
+      .subtitle('', 'prepare .gitignore, write version')
+      .ensureFileContains('.gitignore', '\n.local.json\n')
+      .ensureFileContains('.gitignore', '\n.idea/\n')
+      .then(function(next){
         pkg.version = this.getValue('newRevision');
         var releaseType = this.getValue('releaseType');
         if( releaseType!=='same'){
@@ -97,15 +114,15 @@ var env = !program.env?'local':program.env;
           fs.writeFileSync('./version', releaseType+' '+pkg.version+'\n');
         }
         next();
+      }).then(function(next){
+        console.log("generate all release logs")
+        next();
+      })
 
-      }).stream('git pull <%=sshUrl%> <%=branch%>', function(){
+      .subtitle('', 'git add, commit, tag')
+      .stream('git add -A', function(){
         sendGhAuth(this);
         this.display();
-
-      }).stream('git add -A', function(){
-        sendGhAuth(this);
-        this.display();
-
       }).stream('git commit -am "Publish <%=releaseType%> <%=newRevision%>"', function(){
         this.success(/\[([\w-]+)\s+([\w-]+)]/i,
           'branch\t\t%s\nnew revision\t%s');
@@ -114,7 +131,8 @@ var env = !program.env?'local':program.env;
         this.warn(/(est propre|is clean)/i, 'Nothing to do');
         sendGhAuth(this);
         this.display();
-
+      }).stream('git push <%=sshUrl%> <%=newRevision%>', function(){
+        this.display();
       }).stream('git -c core.askpass=true push <%= sshUrl %> <%= branch %>', function(){
         this.warn(/fatal:/);
         this.success(/(:<remoteRev>[\w-]+)[.]+(:<localRev>[\w-]+)\s+(:<remoteBranch>[\w-]+)\s+->\s+(:<localBranch>[\w-]+)/,
@@ -122,8 +140,9 @@ var env = !program.env?'local':program.env;
         this.success('Everything up-to-date');
         sendGhAuth(this);
         this.display();
+      })
 
-      }).when(!pkg.private, function(line){
+      .when(!pkg.private, function(line){
         line.stream('npm publish', function(){
           this.display();
         });
@@ -133,7 +152,8 @@ var env = !program.env?'local':program.env;
             var tagname = this.getValue('newRevision');
             var releaseType = this.getValue('releaseType');
             var branch = this.getValue('branch');
-            gitHubRelease(this, branch, pkg.name, tagname, releaseType, then);
+            var body = this.getValue('releaseLog')+'';
+            gitHubRelease(this, branch, pkg.name, tagname, releaseType, body, then);
           });
       }).when(!machine.profileData.github, function(line){
         line.title('', 'Creating git tag')
@@ -166,7 +186,7 @@ function sendGhAuth(context){
   }
 }
 
-function gitHubRelease(context, branch, reponame, tagname, releaseType, then){
+function gitHubRelease(context, branch, reponame, tagname, releaseType, body, then){
   var gitAuth = context.getValue('gitAuth');
   var ghClient = require('github');
 
@@ -186,7 +206,7 @@ function gitHubRelease(context, branch, reponame, tagname, releaseType, then){
     tag_name: tagname,
     target_commitish: branch,
     //name: "node-github-name",
-    //body: "node-github-body",
+    body: body,
     //draft: false,
     prerelease: releaseType==='prerelease'
   }, then);
