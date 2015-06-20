@@ -1,3 +1,9 @@
+:package: patch v1.0.20
+
+```
+Add shortReleaseLog to commit the repo when it is dirty.
+```
+
 :package: patch v1.0.19
 
 ```
