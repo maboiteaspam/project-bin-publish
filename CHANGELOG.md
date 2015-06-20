@@ -4,18 +4,6 @@
 Add small emoticon to version upgrade git commit.
 ```
 
-:package: patch v1.0.23
-
-```
-Your description of the release comes here.
-```
-
-Commits history, use them to write useful release log.
-
-* [[25cadf71e9](https://github.com/maboiteaspam/project-bin-publish/commit/25cadf71e9) - :package: patch v1.0.22 (clement) 
-* [[373664d776](https://github.com/maboiteaspam/project-bin-publish/commit/373664d776) - Add small emoticon to version upgrade git commit. (clement) 
-
-
 :package: patch v1.0.22
 
 ```
