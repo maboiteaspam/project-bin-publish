@@ -1,3 +1,9 @@
+:package: patch v1.0.21
+
+```
+Fix shortReleaseLog
+```
+
 :package: patch v1.0.20
 
 ```
