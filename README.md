@@ -8,8 +8,11 @@ Bump the version and realize steps to help you to publish your project on github
 - Checkout `publish.branch`
 - Gather version upgrade
 - Gather release log
+- Git commit with `-m <%=releaseLog%>`
 - Update `CHANGELOG.md`
-- Ensure `.gitingore` is correct
+- Update `version` file
+- Update `package.json` version property
+- Ensure `.gitignore` is correct
 - Git commit with `<%=releaseType%> v<%=newRevision%>`
 - Git tag with `<%=newRevision%> -m <%=releaseLog%>`
 - Git push
