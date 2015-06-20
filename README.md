@@ -2,6 +2,20 @@
 
 Bump the version and realize steps to help you to publish your project on github, npm.
 
+#### In details
+
+- Fetch `repository.url`
+- Checkout `publish.branch`
+- Gather version upgrade
+- Gather release log
+- Update `CHANGELOG.md`
+- Ensure `.gitingore` is correct
+- Git commit with `<%=releaseType%> v<%=newRevision%>`
+- Git tag with `<%=newRevision%> -m <%=releaseLog%>`
+- Git push
+- Npm publish, if the package is not private
+- If `github` auth is provided, create a github tag
+
 ## Installation
 
 ```sh
@@ -43,6 +57,11 @@ Create a new file ```.local.json``` and adjust this content.
 }
 ```
 
+## TODO
+
+- add bitbucket support
+- add new-relic support
+- add automatic test validation prior to release updgrade procedure support
 
 ## How to contribute
 
