@@ -1,3 +1,11 @@
+:package: patch v1.0.18
+
+```
+Add a relevant commit right after release log is known in case the repo is dirty.
+Removed an useless git tag step at the end of the line.
+```
+
+
 :package: patch v1.0.17
 
 ```
