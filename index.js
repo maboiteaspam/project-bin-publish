@@ -95,7 +95,7 @@ var env = !program.env?'local':program.env;
       }).generateTemplate('<%=releaseLogTpl%>', '<%=tmpReleaseLog%>', {releaseCommits:'<%=releaseCommits%>'}, function(){
       }).textedit('Write the release log', '<%=tmpReleaseLog%>', function(changelog){
         this.saveValue('releaseLog', changelog+'\n');
-      }).stream('git commit -am "<%=quote("releaseLog")%>"', function(){
+      }).stream('git commit -am <%=quote("releaseLog")%>', function(){
         this.success(/\[([\w-]+)\s+([\w-]+)]/i,
           'branch\t\t%s\nnew revision\t%s');
         this.success(/([0-9]+)\s+file[^0-9]+?([0-9]+)?[^0-9]+?([0-9]+)?/i,
