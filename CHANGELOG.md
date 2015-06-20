@@ -1,3 +1,9 @@
+:package: patch v1.0.24
+
+```
+Add small emoticon to version upgrade git commit.
+```
+
 :package: patch v1.0.23
 
 ```
