@@ -19,6 +19,7 @@
     "commander": "^2.8.1",
     "github": "^0.2.4",
     "semver": "^4.3.4",
+    "temp": "^0.8.3",
     "underscore": "^1.8.3"
   }
 }
