@@ -100,6 +100,7 @@ var env = !program.env?'local':program.env;
         shortReleaseLog.shift();
         shortReleaseLog.shift();
         shortReleaseLog.pop();
+        shortReleaseLog.pop();
         this.saveValue('shortReleaseLog', shortReleaseLog);
       }).stream('git commit -am <%=quote("shortReleaseLog")%>', function(){
         this.success(/\[([\w-]+)\s+([\w-]+)]/i,
