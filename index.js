@@ -62,30 +62,16 @@ var env = !program.env?'local':program.env;
         this.saveValue('projectPath', projectPath);
         this.saveValue('branch', pubConfig.branch);
         this.saveValue('gitAuth', machine.profileData.github);
+        this.saveValue('tmpReleaseLog', temp.path({suffix: '.releaselog'}));
+        this.saveValue('releaseLogTpl', path.join(__dirname,'templates','release_log.ejs'));
         next();
       })
 
-      .choose('Select a revision type', releaseTypes, function(release){
-        releaseType = release.match(/^\s*([a-z]+)\s*=>\s*(.+)$/i)[1];
-        newRevision = release.match(/^\s*([a-z]+)\s*=>\s*(.+)$/i)[2];
-        this.saveValue('releaseType', releaseType);
-        this.saveValue('newRevision', newRevision);
-      })
-
-      .textedit('Write the release log', function(changelog){
-        this.saveValue('releaseLog', changelog+'\n');
-      })
-
+      .title('', 'Release project\non <%=branch%>')
       .stream('cd <%=projectPath%>', function(){
         this.display();
         this.dieOnError();
-      }).stream('git status', function(){
-        this.must(/(est propre|is clean)/ig, 'Tree should be clean')
-          .or(line.confirmToStop('Tree is unclean, stop now ?', true));
       })
-
-      .title('', 'Release project\non <%=branch%> to <%=releaseType%> <%=newRevision%>')
-
       .subtitle('', 'Fetching from git')
       .stream('git fetch <%=sshUrl%>', function(){
         sendGhAuth(this);
@@ -98,10 +84,18 @@ var env = !program.env?'local':program.env;
         this.display();
       })
 
-      .subtitle('', 'git tag')
-      .stream('git tag -a <%=newRevision%> -m <%=quote("releaseLog")%>', function(){
-        this.display();
-      })
+      .subtitle('', 'Gather release information')
+      .choose('Select a revision type', releaseTypes, function(release){
+        releaseType = release.match(/^\s*([a-z]+)\s*=>\s*(.+)$/i)[1];
+        newRevision = release.match(/^\s*([a-z]+)\s*=>\s*(.+)$/i)[2];
+        this.saveValue('releaseType', releaseType);
+        this.saveValue('newRevision', newRevision);
+      }).exec('changelog-maker', function(err, stdout){
+        this.saveValue('releaseCommits', stdout);
+      }).generateTemplate('<%=releaseLogTpl%>', '<%=tmpReleaseLog%>', {releaseCommits:'<%=releaseCommits%>'}, function(){
+      }).textedit('Write the release log', '<%=tmpReleaseLog%>', function(changelog){
+        this.saveValue('releaseLog', changelog+'\n');
+      }).prependFile('CHANGELOG.md', '<%=releaseLog%>\n')
 
       .subtitle('', 'prepare .gitignore, write version')
       .ensureFileContains('.gitignore', '\n.local.json\n')
@@ -114,22 +108,21 @@ var env = !program.env?'local':program.env;
           fs.writeFileSync('./version', releaseType+' '+pkg.version+'\n');
         }
         next();
-      }).then(function(next){
-        console.log("generate all release logs")
-        next();
       })
 
-      .subtitle('', 'git add, commit, tag')
+      .subtitle('', 'git add, commit, tag, push')
       .stream('git add -A', function(){
         sendGhAuth(this);
         this.display();
-      }).stream('git commit -am "semver-<%=releaseType%>: <%=newRevision%>"', function(){
+      }).stream('git commit -am "<%=releaseType%> v<%=newRevision%>"', function(){
         this.success(/\[([\w-]+)\s+([\w-]+)]/i,
           'branch\t\t%s\nnew revision\t%s');
         this.success(/([0-9]+)\s+file[^0-9]+?([0-9]+)?[^0-9]+?([0-9]+)?/i,
           'changed\t%s\nnew\t\t%s\ndeleted\t%s');
         this.warn(/(est propre|is clean)/i, 'Nothing to do');
         sendGhAuth(this);
+        this.display();
+      }).stream('git tag -a <%=newRevision%> -m <%=quote("releaseLog")%>', function(){
         this.display();
       }).stream('git push <%=sshUrl%> <%=newRevision%>', function(){
         this.display();
