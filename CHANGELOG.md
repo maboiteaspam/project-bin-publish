@@ -1,3 +1,16 @@
+:package: patch v1.0.31
+
+```
+Cosmtic release.
+```
+
+Commits
+
+* [[8f7ec6cd7b](https://github.com/maboiteaspam/project-bin-publish/commit/8f7ec6cd7b) - cosmetic (clement) 
+* [[7782e36807](https://github.com/maboiteaspam/project-bin-publish/commit/7782e36807) - patch v1.0.30 (clement) 
+* [[9ed1a60d06](https://github.com/maboiteaspam/project-bin-publish/commit/9ed1a60d06) - Fix repoName detecion. (clement) 
+
+
 :package: patch v1.0.30
 
 ```
