@@ -1,3 +1,14 @@
+:package: patch v1.0.29
+
+```
+Fix up short release log.
+```
+
+Commits history
+
+* [[cb004e795f](https://github.com/maboiteaspam/project-bin-publish/commit/cb004e795f) - :package: patch v1.0.28 (clement) 
+
+
 :package: patch v1.0.28
 
 ```
