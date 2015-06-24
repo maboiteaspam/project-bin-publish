@@ -1,3 +1,15 @@
+:package: patch v1.0.30
+
+```
+Fix repoName detecion.
+```
+
+Commits history
+
+* [[9df3d61804](https://github.com/maboiteaspam/project-bin-publish/commit/9df3d61804) - patch v1.0.29 (clement) 
+* [[4b1270c3c1](https://github.com/maboiteaspam/project-bin-publish/commit/4b1270c3c1) - Fix up short release log. (clement) 
+
+
 :package: patch v1.0.29
 
 ```
