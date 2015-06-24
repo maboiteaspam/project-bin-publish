@@ -138,7 +138,7 @@ var env = !program.env?'local':program.env;
       .stream('git add -A', function(){
         sendGhAuth(this);
         this.display();
-      }).stream('git commit -am ":package: <%=releaseType%> v<%=newRevision%>"', function(){
+      }).stream('git commit -am "<%=releaseType%> v<%=newRevision%>"', function(){
         this.success(/\[([\w-]+)\s+([\w-]+)]/i,
           'branch\t\t%s\nnew revision\t%s');
         this.success(/([0-9]+)\s+file[^0-9]+?([0-9]+)?[^0-9]+?([0-9]+)?/i,
@@ -146,7 +146,7 @@ var env = !program.env?'local':program.env;
         this.warn(/(est propre|is clean)/i, 'Nothing to do');
         sendGhAuth(this);
         this.display();
-      }).stream('git tag -a <%=newRevision%> -m <%=quote("releaseLog")%>', function(){
+      }).stream('git tag -a <%=newRevision%> -m <%=quote("shortReleaseLog")%>', function(){
         this.display();
       }).stream('git -c core.askpass=true push <%=gitUrl%> <%=newRevision%>', function(){
         this.display();
@@ -170,7 +170,7 @@ var env = !program.env?'local':program.env;
             var repoName = this.getValue('repoName');
             var releaseType = this.getValue('releaseType');
             var branch = this.getValue('branch');
-            var body = this.getValue('releaseLog')+'';
+            var body = this.getValue('shortReleaseLog')+'';
             gitHubRelease(this, branch, repoName, tagname, releaseType, body, then);
           });
       }).title('', '\nAll done !\n\n' +
