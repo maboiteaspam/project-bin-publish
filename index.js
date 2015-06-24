@@ -58,6 +58,7 @@ var env = !program.env?'local':program.env;
         sshUrl = pkg.repository.url.replace(/https?:\/\//,'ssh://git@');
         this.saveValue('pkgName', pkg.name);
         this.saveValue('pkgRepository', pkg.repository);
+        this.saveValue('httpUrl', pkg.repository.url);
         this.saveValue('sshUrl', sshUrl);
         this.saveValue('projectPath', projectPath);
         this.saveValue('branch', pubConfig.branch);
@@ -139,9 +140,9 @@ var env = !program.env?'local':program.env;
         this.display();
       }).stream('git tag -a <%=newRevision%> -m <%=quote("releaseLog")%>', function(){
         this.display();
-      }).stream('git push <%=sshUrl%> <%=newRevision%>', function(){
+      }).stream('git -c core.askpass=true push <%=httpUrl%> <%=newRevision%>', function(){
         this.display();
-      }).stream('git -c core.askpass=true push <%= sshUrl %> <%= branch %>', function(){
+      }).stream('git -c core.askpass=true push <%=httpUrl%> <%= branch %>', function(){
         this.warn(/fatal:/);
         this.success(/(:<remoteRev>[\w-]+)[.]+(:<localRev>[\w-]+)\s+(:<remoteBranch>[\w-]+)\s+->\s+(:<localBranch>[\w-]+)/,
           'pushed\nlocal\tlocalBranch@localRev\nremote\tremoteBranch@remoteRev');
