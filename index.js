@@ -103,7 +103,7 @@ var env = !program.env?'local':program.env;
         this.saveValue('releaseCommits', stdout);
       }).generateTemplate('<%=releaseLogTpl%>', '<%=tmpReleaseLog%>', {releaseCommits:'<%=releaseCommits%>'}, function(){
       }).textedit('Write the release log', '<%=tmpReleaseLog%>', function(changelog){
-        changelog = changelog.toString().replace(', use them to write useful release log.', '');
+        changelog = changelog.toString().replace(' history, use them to write useful release log.', '');
         this.saveValue('releaseLog', changelog);
         var shortReleaseLog = '';
         var started = false;
