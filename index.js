@@ -57,7 +57,9 @@ var env = !program.env?'local':program.env;
         }
         var repoName = pkg.repository.url
           .replace(/(https?|git):\/\/github[.]com\//,'')
-          .replace(/\/[/]$/,'');
+          .replace(/^[^/]+[/]/,'')
+          .replace(/[.]\w+$/,'')
+          ;
         if(pkg.repository.url.match(/github/)){
           gitUrl = pkg.repository.url.replace(/(https?|git):\/\/github[.]com\//,'git@github.com:');
           gitUrl = gitUrl.replace(/[.]git$/, '') + '.git';
