@@ -1,3 +1,14 @@
+:package: patch v1.0.26
+
+```
+Improved short release log parsing in order to not pollute Github release page.
+```
+
+Commits history, use them to write useful release log.
+
+* [[d682dd6f1f](https://github.com/maboiteaspam/project-bin-publish/commit/d682dd6f1f) - :package: patch v1.0.25 (clement) 
+
+
 :package: patch v1.0.25
 
 ```
