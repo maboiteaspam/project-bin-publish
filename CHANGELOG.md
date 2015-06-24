@@ -1,3 +1,15 @@
+:package: same v1.0.26
+
+```
+Try to fix git push...
+```
+
+Commits history, use them to write useful release log.
+
+* [[7b63b1eaa5](https://github.com/maboiteaspam/project-bin-publish/commit/7b63b1eaa5) - :package: patch v1.0.26 (clement) 
+* [[fdf478364e](https://github.com/maboiteaspam/project-bin-publish/commit/fdf478364e) - Improved short release log parsing in order to not pollute Github release page. (clement) 
+
+
 :package: patch v1.0.26
 
 ```
