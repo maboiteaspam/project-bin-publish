@@ -1,3 +1,13 @@
+:package: patch v1.0.28
+
+```
+Fix repository name detection for github release step.
+```
+
+Commits
+
+* [[d2f89f0a74](https://github.com/maboiteaspam/project-bin-publish/commit/d2f89f0a74) - fixed repository name detection (clement) 
+
 :package: patch v1.0.27
 
 ```
