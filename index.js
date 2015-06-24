@@ -96,12 +96,13 @@ var env = !program.env?'local':program.env;
       }).generateTemplate('<%=releaseLogTpl%>', '<%=tmpReleaseLog%>', {releaseCommits:'<%=releaseCommits%>'}, function(){
       }).textedit('Write the release log', '<%=tmpReleaseLog%>', function(changelog){
         this.saveValue('releaseLog', changelog);
-        var shortReleaseLog = changelog.toString().split('\n');
-        shortReleaseLog.shift();
-        shortReleaseLog.shift();
-        shortReleaseLog.shift();
-        shortReleaseLog.pop();
-        shortReleaseLog.pop();
+        var shortReleaseLog = '';
+        var started = false;
+        changelog.toString().split('\n').forEach(function(v, k){
+          if(!started && v.match(/^`+/) ) (started = true);
+          else if(started && !v.match(/^`+/)) shortReleaseLog += v + '\n';
+          else started = false;
+        })
         this.saveValue('shortReleaseLog', shortReleaseLog);
       }).stream('git commit -am <%=quote("shortReleaseLog")%>', function(){
         this.success(/\[([\w-]+)\s+([\w-]+)]/i,
