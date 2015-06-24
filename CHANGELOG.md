@@ -1,3 +1,14 @@
+:package: patch v1.0.25
+
+```
+Fix github push error message
+See https://coderwall.com/p/7begkw/fatal-remote-error-you-can-t-push-to-git
+```
+
+* [[8910ea49ab](https://github.com/maboiteaspam/project-bin-publish/commit/8910ea49ab) - when git push make use of http instead of git protocol to fight github error message (clement) 
+* [[5c056b3f72](https://github.com/maboiteaspam/project-bin-publish/commit/5c056b3f72) - clean CHANGELOG (clement) 
+* [[8090ac2e3f](https://github.com/maboiteaspam/project-bin-publish/commit/8090ac2e3f) - :package: patch v1.0.24 (clement) 
+
 :package: patch v1.0.24
 
 ```
