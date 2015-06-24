@@ -18,7 +18,7 @@ var pkg = require(path.join(projectPath, 'package.json') );
 var releaseTypes = listReleaseTypes( pkg.version );
 var newRevision;
 var releaseType;
-var sshUrl;
+var gitUrl;
 
 program
   .version(require(path.join(__dirname, 'package.json') ).version)
@@ -55,11 +55,12 @@ var env = !program.env?'local':program.env;
         if(!pkg.repository){
           throw 'pkg.repository is missing';
         }
-        sshUrl = pkg.repository.url.replace(/https?:\/\//,'ssh://git@');
+        if(pkg.repository.url.match(/github/)){
+          gitUrl = pkg.repository.url.replace(/https?:\/\/github[.]com/,'git@github.com:') + '.git';
+        }
         this.saveValue('pkgName', pkg.name);
         this.saveValue('pkgRepository', pkg.repository);
-        this.saveValue('httpUrl', pkg.repository.url);
-        this.saveValue('sshUrl', sshUrl);
+        this.saveValue('gitUrl', gitUrl);
         this.saveValue('projectPath', projectPath);
         this.saveValue('branch', pubConfig.branch);
         this.saveValue('gitAuth', machine.profileData.github);
@@ -74,13 +75,13 @@ var env = !program.env?'local':program.env;
         this.dieOnError();
       })
       .subtitle('', 'Fetching from git')
-      .stream('git fetch <%=sshUrl%>', function(){
+      .stream('git fetch <%=gitUrl%>', function(){
         sendGhAuth(this);
         this.display();
       }).stream('git checkout <%=branch%>', function(){
         sendGhAuth(this);
         this.display();
-      }).stream('git pull <%=sshUrl%> <%=branch%>', function(){
+      }).stream('git pull <%=gitUrl%> <%=branch%>', function(){
         sendGhAuth(this);
         this.display();
       })
@@ -141,9 +142,9 @@ var env = !program.env?'local':program.env;
         this.display();
       }).stream('git tag -a <%=newRevision%> -m <%=quote("releaseLog")%>', function(){
         this.display();
-      }).stream('git push <%=httpUrl%> <%=newRevision%>', function(){
+      }).stream('git -c core.askpass=true push <%=gitUrl%> <%=newRevision%>', function(){
         this.display();
-      }).stream('git push <%=httpUrl%> <%= branch %>', function(){
+      }).stream('git -c core.askpass=true push <%=gitUrl%> <%= branch %>', function(){
         this.warn(/fatal:/);
         this.success(/(:<remoteRev>[\w-]+)[.]+(:<localRev>[\w-]+)\s+(:<remoteBranch>[\w-]+)\s+->\s+(:<localBranch>[\w-]+)/,
           'pushed\nlocal\tlocalBranch@localRev\nremote\tremoteBranch@remoteRev');
