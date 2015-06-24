@@ -141,9 +141,9 @@ var env = !program.env?'local':program.env;
         this.display();
       }).stream('git tag -a <%=newRevision%> -m <%=quote("releaseLog")%>', function(){
         this.display();
-      }).stream('git -c core.askpass=true push <%=httpUrl%> <%=newRevision%>', function(){
+      }).stream('git push <%=httpUrl%> <%=newRevision%>', function(){
         this.display();
-      }).stream('git -c core.askpass=true push <%=httpUrl%> <%= branch %>', function(){
+      }).stream('git push <%=httpUrl%> <%= branch %>', function(){
         this.warn(/fatal:/);
         this.success(/(:<remoteRev>[\w-]+)[.]+(:<localRev>[\w-]+)\s+(:<remoteBranch>[\w-]+)\s+->\s+(:<localBranch>[\w-]+)/,
           'pushed\nlocal\tlocalBranch@localRev\nremote\tremoteBranch@remoteRev');
