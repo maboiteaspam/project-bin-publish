@@ -55,11 +55,16 @@ var env = !program.env?'local':program.env;
         if(!pkg.repository){
           throw 'pkg.repository is missing';
         }
+        var repoName = pkg.repository.url
+          .replace(/(https?|git):\/\/github[.]com\//,'')
+          .replace(/\/[/]$/,'');
         if(pkg.repository.url.match(/github/)){
-          gitUrl = pkg.repository.url.replace(/https?:\/\/github[.]com/,'git@github.com:') + '.git';
+          gitUrl = pkg.repository.url.replace(/(https?|git):\/\/github[.]com\//,'git@github.com:');
+          gitUrl = gitUrl.replace(/[.]git$/, '') + '.git';
         }
         this.saveValue('pkgName', pkg.name);
         this.saveValue('pkgRepository', pkg.repository);
+        this.saveValue('repoName', repoName);
         this.saveValue('gitUrl', gitUrl);
         this.saveValue('projectPath', projectPath);
         this.saveValue('branch', pubConfig.branch);
@@ -96,14 +101,15 @@ var env = !program.env?'local':program.env;
         this.saveValue('releaseCommits', stdout);
       }).generateTemplate('<%=releaseLogTpl%>', '<%=tmpReleaseLog%>', {releaseCommits:'<%=releaseCommits%>'}, function(){
       }).textedit('Write the release log', '<%=tmpReleaseLog%>', function(changelog){
+        changelog = changelog.toString().replace(', use them to write useful release log.', '');
         this.saveValue('releaseLog', changelog);
         var shortReleaseLog = '';
         var started = false;
-        changelog.toString().split('\n').forEach(function(v, k){
+        changelog.split('\n').forEach(function(v, k){
           if(!started && v.match(/^`+/) ) (started = true);
           else if(started && !v.match(/^`+/)) shortReleaseLog += v + '\n';
           else started = false;
-        })
+        });
         this.saveValue('shortReleaseLog', shortReleaseLog);
       }).stream('git commit -am <%=quote("shortReleaseLog")%>', function(){
         this.success(/\[([\w-]+)\s+([\w-]+)]/i,
@@ -161,10 +167,11 @@ var env = !program.env?'local':program.env;
         line.title('', 'Creating github tag')
           .then(function(then){
             var tagname = this.getValue('newRevision');
+            var repoName = this.getValue('repoName');
             var releaseType = this.getValue('releaseType');
             var branch = this.getValue('branch');
             var body = this.getValue('releaseLog')+'';
-            gitHubRelease(this, branch, pkg.name, tagname, releaseType, body, then);
+            gitHubRelease(this, branch, repoName, tagname, releaseType, body, then);
           });
       }).title('', '\nAll done !\n\n' +
       'Published <%=pkgName%>\n' +
