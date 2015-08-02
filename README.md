@@ -62,6 +62,7 @@ Create a new file ```.local.json``` and adjust this content.
 
 ## TODO
 
+- show confirm when no dependencies in the package file.
 - add bitbucket support
 - add new-relic support
 - add automatic test validation prior to release updgrade procedure support
